@@ -22,37 +22,7 @@ class AWSServices {
       debugPrint('Login Success...');
       print(session!.getAccessToken().getJwtToken());
 
-      const endpoint =
-          'https://a7wredygja.execute-api.ap-southeast-1.amazonaws.com/';
-      final credentials = CognitoCredentials(
-          'ap-southeast-1:fc90cb6d-a484-4fbc-8b9e-95f3d7ca697a', userPool);
-      await credentials.getAwsCredentials(session.getIdToken().getJwtToken());
-      final awsSigV4Client = AwsSigV4Client(
-          credentials.accessKeyId!, credentials.secretAccessKey!, endpoint,
-          sessionToken: credentials.sessionToken,
-          region: 'ap-southeast-1');
-
-      final signedRequest = SigV4Request(awsSigV4Client,
-          method: 'POST',
-          path: '/employees',
-          body: Map<String, dynamic>.from({
-            "empId":"AAA123",
-            "name":"Wan",
-            "email":"wanmuz86@gmail.com",
-            "phone":"012345",
-            "address":"123 jalan 123"
-          }));
-
-      http.Response? response;
-      try {
-        response = await http.post(
-          Uri.parse(signedRequest.url!),
-          body: signedRequest.body,
-        );
-      } catch (e) {
-        print(e);
-      }
-      print(response?.body);
+      // 
     } on CognitoUserNewPasswordRequiredException catch (e) {
       debugPrint('CognitoUserNewPasswordRequiredException $e');
     } on CognitoUserMfaRequiredException catch (e) {
